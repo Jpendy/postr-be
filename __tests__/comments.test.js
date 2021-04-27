@@ -76,4 +76,20 @@ describe('postr-be routes', () => {
             })
     })
 
+    it('it gets a comment by id with GET', () => {
+        return request(app)
+            .get(`/api/v1/comments/${comment.id}`)
+            .then(res => {
+                expect(res.body).toEqual({
+                    id: '1',
+                    body: 'first comment body',
+                    voteScore: '0',
+                    dateCreated: expect.any(String),
+                    dateModified: null,
+                    parentCommentId: null,
+                    userId: user.id,
+                    postId: post.id
+                })
+            })
+    })
 });
