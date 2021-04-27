@@ -5,6 +5,7 @@ const app = require('../lib/app');
 const Post = require('../lib/models/Post');
 const User = require('../lib/models/User');
 const Board = require('../lib/models/Board');
+const Comment = require('../lib/models/Comment');
 
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
     req.user = {
@@ -43,6 +44,12 @@ describe('postr-be routes', () => {
             boardId: board.id
         })
 
+        comment = await Comment.insert({
+            body: 'first comment body',
+            parentCommentId: null,
+            userId: user.id,
+            postId: post.id
+        })
     })
 
     it('it creates a new post with POST', () => {
@@ -80,6 +87,7 @@ describe('postr-be routes', () => {
                     imageUrl: 'placeholderImageUrl',
                     body: 'this is my first posts body',
                     voteScore: '0',
+                    commentCount: '1',
                     userId: user.id,
                     boardId: board.id
                 }])
@@ -90,7 +98,31 @@ describe('postr-be routes', () => {
         return request(app)
             .get(`/api/v1/posts/${post.id}`)
             .then(res => {
-                expect(res.body).toEqual(post)
+                expect(res.body).toEqual({
+                    boardId: "1",
+                    body: "this is my first posts body",
+                    commentCount: undefined,
+                    commentCount: "1",
+                    voteScore: '0',
+                    comments: [
+                        {
+                            body: "first comment body",
+                            dateCreated: "2021-04-27",
+                            dateModified: null,
+                            id: 1,
+                            parentCommentId: null,
+                            postId: 1,
+                            replies: null,
+                            userId: 1,
+                            voteScore: 0,
+                        },
+                    ],
+                    dateCreated: expect.any(String),
+                    id: "1",
+                    imageUrl: "placeholderImageUrl",
+                    title: "first post",
+                    userId: "1",
+                })
             })
     })
 
