@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS boards CASCADE;
-DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS posts CASCADE;
+DROP TABLE IF EXISTS comments;
 
 CREATE TABLE users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -21,7 +22,19 @@ CREATE TABLE posts (
     title TEXT NOT NULL,
     image_url TEXT,
     body TEXT,
+    vote_score BIGINT NOT NULL,
     date_created DATE NOT NULL,
     user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
     board_id BIGINT REFERENCES boards(id) ON DELETE CASCADE
-)
+);
+
+CREATE TABLE comments (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    body TEXT NOT NULL,
+    vote_score BIGINT NOT NULL,
+    date_created DATE NOT NULL,
+    date_modified DATE,
+    parent_comment_id BIGINT REFERENCES comments(id) ON DELETE SET NULL,
+    user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+    post_id BIGINT REFERENCES posts(id) ON DELETE SET NULL
+);

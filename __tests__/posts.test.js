@@ -43,10 +43,84 @@ describe('postr-be routes', () => {
             boardId: board.id
         })
 
-        console.log('post', post)
     })
 
     it('it creates a new post with POST', () => {
+        return request(app)
+            .post('/api/v1/posts')
+            .send({
+                title: 'second post',
+                imageUrl: 'placeholderImageUrl',
+                body: 'this is my second posts body',
+                userId: user.id,
+                boardId: board.id
+            })
+            .then(res => {
+                expect(res.body).toEqual({
+                    id: '2',
+                    dateCreated: expect.any(String),
+                    title: 'second post',
+                    imageUrl: 'placeholderImageUrl',
+                    body: 'this is my second posts body',
+                    voteScore: '0',
+                    userId: user.id,
+                    boardId: board.id
+                })
+            })
+    })
 
+    it('it gets all posts with GET', () => {
+        return request(app)
+            .get('/api/v1/posts')
+            .then(res => {
+                expect(res.body).toEqual([{
+                    id: '1',
+                    dateCreated: expect.any(String),
+                    title: 'first post',
+                    imageUrl: 'placeholderImageUrl',
+                    body: 'this is my first posts body',
+                    voteScore: '0',
+                    userId: user.id,
+                    boardId: board.id
+                }])
+            })
+    })
+
+    it('it gets a post by id with GET', () => {
+        return request(app)
+            .get(`/api/v1/posts/${post.id}`)
+            .then(res => {
+                expect(res.body).toEqual(post)
+            })
+    })
+
+    it('it updates a post by id with PUT', () => {
+        return request(app)
+            .put(`/api/v1/posts/${post.id}`)
+            .send({
+                title: 'updated post',
+                imageUrl: 'placeholderImageUrl',
+                body: 'this is my updated posts body',
+            })
+            .then(res => {
+                expect(res.body).toEqual({
+                    id: '1',
+                    dateCreated: expect.any(String),
+                    title: 'updated post',
+                    imageUrl: 'placeholderImageUrl',
+                    body: 'this is my updated posts body',
+                    voteScore: '0',
+                    userId: user.id,
+                    boardId: board.id
+                })
+            })
+    })
+
+    it('it deletes a post by id with DELETE', () => {
+        return request(app)
+            .delete(`/api/v1/posts/${post.id}`)
+            .then(res => {
+                expect(res.body).toEqual(post)
+            })
     })
 });
