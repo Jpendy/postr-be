@@ -53,6 +53,64 @@ describe('postr-be routes', () => {
         })
     })
 
+    afterEach(async () => {
+        await setup(pool)
+
+        user = await User.insert({
+            username: 'Jake',
+            userImageUrl: 'http://placekitten.com/200/300'
+        })
+
+        board = await Board.insert({
+            name: 'first board',
+            userId: user.id,
+        })
+
+        post = await Post.insert({
+            title: 'first post',
+            imageUrl: 'placeholderImageUrl',
+            body: 'this is my first posts body',
+            userId: user.id,
+            boardId: board.id
+        })
+
+        comment = await Comment.insert({
+            body: 'first comment body',
+            parentCommentId: null,
+            userId: user.id,
+            postId: post.id
+        })
+
+        await Comment.insert({
+            body: 'independant comment body',
+            parentCommentId: null,
+            userId: user.id,
+            postId: post.id
+        })
+
+        const second = await Comment.insert({
+            body: 'second comment body',
+            parentCommentId: comment.id,
+            userId: user.id,
+            postId: null
+        })
+
+        await Comment.insert({
+            body: 'most inner comment body',
+            parentCommentId: second.id,
+            userId: user.id,
+            postId: null
+        })
+
+        await Comment.insert({
+            body: 'third comment body',
+            parentCommentId: comment.id,
+            userId: user.id,
+            postId: null
+        })
+
+    })
+
     it('it posts a new comment with POST', () => {
         return request(app)
             .post('/api/v1/comments')
@@ -80,16 +138,31 @@ describe('postr-be routes', () => {
         return request(app)
             .get(`/api/v1/comments/${comment.id}`)
             .then(res => {
+                expect(res.body).toEqual(comment)
+            })
+    })
+
+    it('it updates a comment by id with PUT', () => {
+        return request(app)
+            .put(`/api/v1/comments/${comment.id}`)
+            .send({
+                ...comment,
+                body: 'my updated body',
+            })
+            .then(res => {
                 expect(res.body).toEqual({
-                    id: '1',
-                    body: 'first comment body',
-                    voteScore: '0',
-                    dateCreated: expect.any(String),
-                    dateModified: null,
-                    parentCommentId: null,
-                    userId: user.id,
-                    postId: post.id
+                    ...comment,
+                    body: 'my updated body',
+                    dateModified: expect.any(String)
                 })
+            })
+    })
+
+    it('it can delete a comment with DELETE', () => {
+        return request(app)
+            .delete(`/api/v1/comments/${comment.id}`)
+            .then(res => {
+                expect(res.body).toEqual(comment)
             })
     })
 });
