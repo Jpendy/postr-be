@@ -59,6 +59,7 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual([{
                     id: '1',
                     name: 'first board',
+                    postCount: "0",
                     userId: board.id,
                     dateCreated: expect.any(String),
                 }])
@@ -66,13 +67,15 @@ describe('postr-be routes', () => {
 
     })
 
-    it('it can get a board by id with GET', () => {
+    it('it can get a board by name with GET', () => {
         return request(app)
-            .get(`/api/v1/boards/${board.id}`)
+            .get(`/api/v1/boards/${board.name}`)
             .then(res => {
                 expect(res.body).toEqual({
                     id: '1',
                     name: 'first board',
+                    postCount: "0",
+                    posts: [],
                     userId: board.id,
                     dateCreated: expect.any(String),
                 })
