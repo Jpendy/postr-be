@@ -65,6 +65,7 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     id: '2',
                     dateCreated: expect.any(String),
+                    dateModified: null,
                     title: 'second post',
                     imageUrl: 'placeholderImageUrl',
                     body: 'this is my second posts body',
@@ -82,6 +83,7 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual([{
                     id: '1',
                     dateCreated: expect.any(String),
+                    dateModified: null,
                     title: 'first post',
                     imageUrl: 'placeholderImageUrl',
                     body: 'this is my first posts body',
@@ -98,14 +100,20 @@ describe('postr-be routes', () => {
             .get(`/api/v1/posts/${post.id}`)
             .then(res => {
                 expect(res.body).toEqual({
+                    id: "1",
                     boardId: "1",
                     body: "this is my first posts body",
                     commentCount: "1",
                     voteScore: '0',
+                    dateCreated: expect.any(String),
+                    dateModified: null,
+                    imageUrl: "placeholderImageUrl",
+                    title: "first post",
+                    userId: "1",
                     comments: [
                         {
                             body: "first comment body",
-                            dateCreated: "2021-04-27",
+                            dateCreated: expect.any(String),
                             dateModified: null,
                             id: 1,
                             parentCommentId: null,
@@ -114,12 +122,7 @@ describe('postr-be routes', () => {
                             userId: 1,
                             voteScore: 0,
                         },
-                    ],
-                    dateCreated: expect.any(String),
-                    id: "1",
-                    imageUrl: "placeholderImageUrl",
-                    title: "first post",
-                    userId: "1",
+                    ]
                 })
             })
     })
@@ -136,6 +139,7 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     id: '1',
                     dateCreated: expect.any(String),
+                    dateModified: expect.any(String),
                     title: 'updated post',
                     imageUrl: 'placeholderImageUrl',
                     body: 'this is my updated posts body',
@@ -152,5 +156,19 @@ describe('postr-be routes', () => {
             .then(res => {
                 expect(res.body).toEqual(post)
             })
+    })
+
+    it('it can post a new vote on a post and add to post vote history', () => {
+        return request(app)
+            .post(`/api/v1/posts/vote`)
+            .send({
+                voteHistory: null,
+                vote: 1,
+                postId: post.id
+            })
+            .then(res => {
+                expect(res.body).toEqual({})
+            })
+
     })
 });

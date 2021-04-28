@@ -34,19 +34,22 @@ describe('postr-be routes', () => {
     })
 
     it('it can create a new board with POST', () => {
-        const board2 = {
-            name: 'second board',
-            userId: user.id,
-        }
-
         return request(app)
             .post('/api/v1/boards')
-            .send(board2)
+            .send({
+                name: 'second board',
+                userId: user.id,
+            })
             .then(res => {
                 expect(res.body).toEqual({
                     id: '2',
+                    name: 'second board',
+                    userId: user.id,
+                    bannerImageUrl: null,
+                    primaryColor: null,
+                    secondaryColor: null,
+                    tertiaryColor: null,
                     dateCreated: expect.any(String),
-                    ...board2
                 })
             })
     })
@@ -58,6 +61,10 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual([{
                     id: '1',
                     name: 'first board',
+                    bannerImageUrl: null,
+                    primaryColor: null,
+                    secondaryColor: null,
+                    tertiaryColor: null,
                     postCount: "0",
                     userId: board.id,
                     dateCreated: expect.any(String),
@@ -73,6 +80,10 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     id: '1',
                     name: 'first board',
+                    bannerImageUrl: null,
+                    primaryColor: null,
+                    secondaryColor: null,
+                    tertiaryColor: null,
                     postCount: "0",
                     posts: [],
                     userId: board.id,
@@ -81,14 +92,24 @@ describe('postr-be routes', () => {
             })
     })
 
-    it('it can update a boards name by id with PUT', () => {
+    it('it can update a board by id with PUT', () => {
         return request(app)
             .put(`/api/v1/boards/${board.id}`)
-            .send({ name: 'new name' })
+            .send({
+                name: 'new name',
+                bannerImageUrl: 'new banner image url',
+                primaryColor: 'new primary color',
+                secondaryColor: 'new secondar ycolor',
+                tertiaryColor: 'new third color'
+            })
             .then(res => {
                 expect(res.body).toEqual({
                     ...board,
-                    name: 'new name'
+                    name: 'new name',
+                    bannerImageUrl: 'new banner image url',
+                    primaryColor: 'new primary color',
+                    secondaryColor: 'new secondar ycolor',
+                    tertiaryColor: 'new third color'
                 })
             })
     })
