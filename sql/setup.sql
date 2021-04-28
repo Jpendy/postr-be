@@ -2,6 +2,10 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS boards CASCADE;
 DROP TABLE IF EXISTS posts CASCADE;
 DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS posts_vote_history;
+DROP TABLE IF EXISTS comments_vote_history;
+
+DROP TYPE IF EXISTS VALID_VOTES CASCADE;
 drop function if exists comment_tree(comment_id bigint);
 
 CREATE TABLE users (
@@ -14,8 +18,11 @@ CREATE TABLE users (
 CREATE TABLE boards (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
-    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    date_created DATE NOT NULL
+    banner_image_url TEXT,
+    primary_color TEXT,
+    secondary_color TEXT,
+    date_created DATE NOT NULL,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE posts (
@@ -25,6 +32,7 @@ CREATE TABLE posts (
     body TEXT,
     vote_score BIGINT NOT NULL,
     date_created DATE NOT NULL,
+    date_modified DATE,
     user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
     board_id BIGINT REFERENCES boards(id) ON DELETE CASCADE
 );
@@ -38,6 +46,22 @@ CREATE TABLE comments (
     parent_comment_id BIGINT REFERENCES comments(id) ON DELETE SET NULL,
     user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
     post_id BIGINT REFERENCES posts(id) ON DELETE SET NULL
+);
+
+CREATE TYPE VALID_VOTES AS ENUM ('-1', '0', '1');
+
+CREATE TABLE posts_vote_history (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    vote VALID_VOTES NOT NULL,
+    post_id BIGINT REFERENCES posts(id) ON DELETE CASCADE,
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE comments_vote_history (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    vote VALID_VOTES NOT NULL,
+    comment_id BIGINT REFERENCES comments(id) ON DELETE CASCADE,
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 );
 
 --comment tree function--
