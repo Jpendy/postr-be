@@ -13,7 +13,6 @@ jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
         username: 'Jake',
         userImageUrl: 'http://placekitten.com/200/300'
     }
-    console.log('MOOOOOOCK MOCK')
     next()
 })
 
@@ -138,7 +137,17 @@ describe('postr-be routes', () => {
         return request(app)
             .get(`/api/v1/comments/${comment.id}`)
             .then(res => {
-                expect(res.body).toEqual(comment)
+                expect(res.body).toEqual({
+                    body: "first comment body",
+                    dateCreated: expect.any(String),
+                    dateModified: null,
+                    id: 1,
+                    parentCommentId: null,
+                    postId: 1,
+                    userId: 1,
+                    voteScore: 0,
+                    replies: null,
+                })
             })
     })
 
@@ -164,5 +173,72 @@ describe('postr-be routes', () => {
             .then(res => {
                 expect(res.body).toEqual(comment)
             })
+    })
+
+    it('it munges comments recursively', () => {
+        const comment = {
+            id: '2',
+            body: 'second comment body',
+            vote_score: '0',
+            parent_comment_id: null,
+            date_created: 'expect.any(String)',
+            date_modified: null,
+            user_id: 1,
+            post_id: 1,
+            replies: [{
+                id: '3',
+                body: 'second comment body',
+                vote_score: '0',
+                parent_comment_id: '2',
+                date_created: 'expect.any(String)',
+                date_modified: null,
+                user_id: 1,
+                post_id: null,
+                replies: [{
+                    id: '4',
+                    body: 'second comment body',
+                    vote_score: '0',
+                    parent_comment_id: '3',
+                    date_created: 'expect.any(String)',
+                    date_modified: null,
+                    user_id: 1,
+                    post_id: null,
+                    replies: null
+                }]
+            }]
+        }
+
+        const result = Comment.commentsMunge(comment)
+        expect(result).toEqual({
+            id: '2',
+            body: 'second comment body',
+            voteScore: '0',
+            parentCommentId: null,
+            dateCreated: expect.any(String),
+            dateModified: null,
+            userId: 1,
+            postId: 1,
+            replies: [{
+                id: '3',
+                body: 'second comment body',
+                voteScore: '0',
+                parentCommentId: '2',
+                dateCreated: expect.any(String),
+                dateModified: null,
+                userId: 1,
+                postId: null,
+                replies: [{
+                    id: '4',
+                    body: 'second comment body',
+                    voteScore: '0',
+                    parentCommentId: '3',
+                    dateCreated: expect.any(String),
+                    dateModified: null,
+                    userId: 1,
+                    postId: null,
+                    replies: null
+                }]
+            }]
+        })
     })
 });

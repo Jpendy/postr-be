@@ -13,7 +13,6 @@ jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
         username: 'Jake',
         userImageUrl: 'http://placekitten.com/200/300'
     }
-    console.log('MOOOOOOCK MOCK')
     next()
 })
 
@@ -101,7 +100,6 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     boardId: "1",
                     body: "this is my first posts body",
-                    commentCount: undefined,
                     commentCount: "1",
                     voteScore: '0',
                     comments: [

@@ -11,7 +11,6 @@ jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
         username: 'Jake',
         userImageUrl: 'http://placekitten.com/200/300'
     }
-    console.log('MOOOOOOCK MOCK')
     next()
 })
 
