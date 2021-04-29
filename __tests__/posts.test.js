@@ -158,17 +158,68 @@ describe('postr-be routes', () => {
             })
     })
 
-    it('it can post a new vote on a post and add to post vote history', () => {
+    it('it can post a new vote on a post and insert new vote to post vote history', () => {
         return request(app)
-            .post(`/api/v1/posts/vote`)
+            .post(`/api/v1/posts/vote/${post.id}`)
             .send({
                 voteHistory: null,
                 vote: 1,
-                postId: post.id
             })
             .then(res => {
-                expect(res.body).toEqual({})
+                expect(res.body).toEqual({
+                    post: {
+                        id: "1",
+                        boardId: "1",
+                        body: "this is my first posts body",
+                        voteScore: '1',
+                        dateCreated: expect.any(String),
+                        dateModified: null,
+                        imageUrl: "placeholderImageUrl",
+                        title: "first post",
+                        userId: "1",
+                    },
+                    voteHistory: {
+                        id: '1',
+                        postId: '1',
+                        userId: '1',
+                        vote: 1
+                    }
+                })
             })
+    })
 
+    it('it can update a vote history and a posts vote score accordingly', async () => {
+        await request(app).post(`/api/v1/posts/vote/${post.id}`).send({
+            voteHistory: null,
+            vote: -1,
+        })
+
+        return request(app)
+            .post(`/api/v1/posts/vote/${post.id}`)
+            .send({
+                voteHistory: -1,
+                vote: 1,
+            })
+            .then(res => {
+                expect(res.body).toEqual({
+                    post: {
+                        id: "1",
+                        boardId: "1",
+                        body: "this is my first posts body",
+                        voteScore: '1',
+                        dateCreated: expect.any(String),
+                        dateModified: null,
+                        imageUrl: "placeholderImageUrl",
+                        title: "first post",
+                        userId: "1",
+                    },
+                    voteHistory: {
+                        id: '1',
+                        postId: '1',
+                        userId: '1',
+                        vote: 1
+                    }
+                })
+            })
     })
 });
