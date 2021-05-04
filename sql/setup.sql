@@ -9,7 +9,8 @@ drop function if exists comment_tree(comment_id bigint);
 
 CREATE TABLE users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    username TEXT UNIQUE NOT NULL,
+    google_id TEXT UNIQUE,
+    username TEXT NOT NULL,
     display_name TEXT UNIQUE,
     about_me TEXT,
     user_image_url TEXT

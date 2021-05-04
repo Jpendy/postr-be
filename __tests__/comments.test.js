@@ -27,6 +27,7 @@ describe('postr-be routes', () => {
     let comment;
     beforeEach(async () => {
         user = await User.insert({
+            googleId: '105191630947115329019',
             username: 'Jake',
             userImageUrl: 'http://placekitten.com/200/300'
         })
@@ -56,6 +57,7 @@ describe('postr-be routes', () => {
         await setup(pool)
 
         user = await User.insert({
+            googleId: '105191630947115329019',
             username: 'Jake',
             userImageUrl: 'http://placekitten.com/200/300'
         })
