@@ -73,23 +73,26 @@ declare
     children json;
     comment_obj json;
 begin
-    select json_agg(comment_tree(id)) into children
+    select json_agg(comment_tree(comments.id)) into children
     from comments
     where parent_comment_id=comment_id;
     
     select json_build_object(
-        'id', id,
+        'id', comments.id,
         'body', comments.body,
 		'vote_score', comments.vote_score,
 		'date_created', comments.date_created,
 		'date_modified', comments.date_modified,
 		'parent_comment_id', comments.parent_comment_id,
-		'user_id', comments.user_id,
+		'createdBy', users.display_name,
+        'user_id', comments.user_id,
 		'post_id', comments.post_id,
         'replies', children
     ) into comment_obj 
     from comments
-    where id=comment_id;
+    join users
+    on users.id = comments.user_id
+    where comments.id=comment_id;
 
     return comment_obj;
 end

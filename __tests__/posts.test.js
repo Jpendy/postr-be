@@ -83,6 +83,7 @@ describe('postr-be routes', () => {
             .then(res => {
                 expect(res.body).toEqual([{
                     id: '1',
+                    board: 'first board',
                     dateCreated: expect.any(String),
                     dateModified: null,
                     title: 'first post',
@@ -91,7 +92,8 @@ describe('postr-be routes', () => {
                     voteScore: '0',
                     commentCount: '1',
                     userId: user.id,
-                    boardId: board.id
+                    boardId: board.id,
+                    createdBy: 'Jake'
                 }])
             })
     })
@@ -101,28 +103,31 @@ describe('postr-be routes', () => {
             .get(`/api/v1/posts/${post.id}`)
             .then(res => {
                 expect(res.body).toEqual({
-                    id: "1",
-                    boardId: "1",
-                    body: "this is my first posts body",
-                    commentCount: "1",
+                    id: '1',
+                    title: 'first post',
+                    imageUrl: 'placeholderImageUrl',
+                    body: 'this is my first posts body',
                     voteScore: '0',
                     dateCreated: expect.any(String),
                     dateModified: null,
-                    imageUrl: "placeholderImageUrl",
-                    title: "first post",
-                    userId: "1",
+                    userId: '1',
+                    boardId: '1',
+                    createdBy: 'Jake',
+                    board: 'first board',
+                    commentCount: '1',
                     comments: [
                         {
-                            body: "first comment body",
+                            id: 1,
+                            body: 'first comment body',
+                            voteScore: 0,
                             dateCreated: expect.any(String),
                             dateModified: null,
-                            id: 1,
                             parentCommentId: null,
-                            postId: 1,
-                            replies: null,
+                            createdBy: 'Jake',
                             userId: 1,
-                            voteScore: 0,
-                        },
+                            postId: 1,
+                            replies: null
+                        }
                     ]
                 })
             })

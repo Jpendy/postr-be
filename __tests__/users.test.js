@@ -34,7 +34,7 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     id: '1',
                     username: 'Jake',
-                    displayName: null,
+                    displayName: 'Jake',
                     aboutMe: null,
                     userImageUrl: 'http://placekitten.com/200/300'
                 })
@@ -67,7 +67,7 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     id: '1',
                     username: 'Jake',
-                    displayName: null,
+                    displayName: 'Jake',
                     aboutMe: null,
                     userImageUrl: 'http://placekitten.com/200/300'
                 })

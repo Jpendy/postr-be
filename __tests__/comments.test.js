@@ -147,6 +147,7 @@ describe('postr-be routes', () => {
                     parentCommentId: null,
                     postId: 1,
                     userId: 1,
+                    createdBy: 'Jake',
                     voteScore: 0,
                     replies: null,
                 })
