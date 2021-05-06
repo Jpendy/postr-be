@@ -101,7 +101,12 @@ $$ language plpgsql;
 
 INSERT INTO users (google_id, username, display_name) VALUES ('105191630947115329019', 'Jake Pendergraft', 'Jake Pendergraft');
 
+INSERT INTO users (google_id, username, display_name) VALUES ('105191630947115329014', 'Tom', 'Tom');
+
+
 INSERT INTO boards (name, date_created, user_id) VALUES ('dev board 1', '1999-01-01', 1);
 INSERT INTO boards (name, banner_image_url, date_created, user_id) VALUES ('Blazers', 'https://cutewallpaper.org/21/portland-trail-blazers-background/Portland-Trail-Blazers-Banner-Fast-Online-Image-Editor-.jpg', '1999-01-01', 1);
 
-INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Dame Time', 'https://i.ebayimg.com/images/g/CKsAAOSwjs5fj8XU/s-l300.jpg', 0, '1999-01-01', 2, 1)
+INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Dame Time', 'https://i.ebayimg.com/images/g/CKsAAOSwjs5fj8XU/s-l300.jpg', 0, '1999-01-01', 2, 1);
+
+INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Kitten Post', 'http://placekitten.com/200/200', 0, '1999-01-01', 1, 2);
