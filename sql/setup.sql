@@ -109,4 +109,4 @@ INSERT INTO boards (name, banner_image_url, date_created, user_id) VALUES ('Blaz
 
 INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Dame Time', 'https://i.ebayimg.com/images/g/CKsAAOSwjs5fj8XU/s-l300.jpg', 0, '1999-01-01', 2, 1);
 
-INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Kitten Post', 'http://placekitten.com/200/200', 0, '1999-01-01', 1, 2);
+-- INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Kitten Post', 'http://placekitten.com/200/200', 0, '1999-01-01', 1, 2);
