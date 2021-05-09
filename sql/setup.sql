@@ -9,8 +9,8 @@ drop function if exists comment_tree(comment_id bigint);
 
 CREATE TABLE users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    google_id TEXT UNIQUE,
-    username TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT,
     display_name TEXT UNIQUE,
     about_me TEXT,
     user_image_url TEXT
@@ -99,9 +99,9 @@ end
 $$ language plpgsql;
 
 
-INSERT INTO users (google_id, username, display_name) VALUES ('105191630947115329019', 'Jake Pendergraft', 'Jake Pendergraft');
+INSERT INTO users (email) VALUES ('jpendy256@gmail.com|google');
 
-INSERT INTO users (google_id, username, display_name) VALUES ('105191630947115329014', 'Tom', 'Tom');
+INSERT INTO users (email) VALUES ('tom@.com|postr');
 
 
 INSERT INTO boards (name, date_created, user_id) VALUES ('dev board 1', '1999-01-01', 1);
