@@ -23,7 +23,7 @@ CREATE TABLE boards (
     primary_color TEXT,
     secondary_color TEXT,
     tertiary_color TEXT,
-    date_created DATE NOT NULL,
+    date_created BIGINT,
     user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -31,10 +31,11 @@ CREATE TABLE posts (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title TEXT NOT NULL,
     image_url TEXT,
+    cloudinary_image_public_id TEXT,
     body TEXT,
     vote_score BIGINT NOT NULL,
-    date_created DATE NOT NULL,
-    date_modified DATE,
+    date_created BIGINT NOT NULL,
+    date_modified BIGINT,
     user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
     board_id BIGINT REFERENCES boards(id) ON DELETE CASCADE
 );
@@ -43,8 +44,8 @@ CREATE TABLE comments (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     body TEXT NOT NULL,
     vote_score BIGINT NOT NULL,
-    date_created DATE NOT NULL,
-    date_modified DATE,
+    date_created BIGINT NOT NULL,
+    date_modified BIGINT,
     parent_comment_id BIGINT REFERENCES comments(id) ON DELETE SET NULL,
     user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
     post_id BIGINT REFERENCES posts(id) ON DELETE SET NULL
@@ -99,14 +100,14 @@ end
 $$ language plpgsql;
 
 
-INSERT INTO users (email) VALUES ('jpendy256@gmail.com|google');
+INSERT INTO users (email, display_name) VALUES ('jpendy256@gmail.com', 'Pendy');
 
 INSERT INTO users (email) VALUES ('tom@.com|postr');
 
 
-INSERT INTO boards (name, date_created, user_id) VALUES ('dev board 1', '1999-01-01', 1);
-INSERT INTO boards (name, banner_image_url, date_created, user_id) VALUES ('Blazers', 'https://cutewallpaper.org/21/portland-trail-blazers-background/Portland-Trail-Blazers-Banner-Fast-Online-Image-Editor-.jpg', '1999-01-01', 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('dev board 1', 1620751512118, 1);
+INSERT INTO boards (name, banner_image_url, date_created, user_id) VALUES ('Blazers', 'https://cutewallpaper.org/21/portland-trail-blazers-background/Portland-Trail-Blazers-Banner-Fast-Online-Image-Editor-.jpg', 1620751512118, 1);
 
-INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Dame Time', 'https://i.ebayimg.com/images/g/CKsAAOSwjs5fj8XU/s-l300.jpg', 0, '1999-01-01', 2, 1);
+INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Dame Time', 'https://i.ebayimg.com/images/g/CKsAAOSwjs5fj8XU/s-l300.jpg', 0, 1620751512118, 2, 1);
 
 -- INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Kitten Post', 'http://placekitten.com/200/200', 0, '1999-01-01', 1, 2);
