@@ -20,9 +20,10 @@ CREATE TABLE boards (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
     banner_image_url TEXT,
-    primary_color TEXT,
-    secondary_color TEXT,
-    tertiary_color TEXT,
+    bg_color TEXT,
+    post_color TEXT,
+    font_color TEXT,
+    link_color TEXT,
     date_created BIGINT,
     user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
