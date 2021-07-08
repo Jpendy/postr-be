@@ -47,6 +47,7 @@ CREATE TABLE comments (
     vote_score BIGINT NOT NULL,
     date_created BIGINT NOT NULL,
     date_modified BIGINT,
+    read_by_parent BOOLEAN NOT NULL,
     parent_comment_id BIGINT REFERENCES comments(id) ON DELETE SET NULL,
     user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
     post_id BIGINT REFERENCES posts(id) ON DELETE SET NULL
