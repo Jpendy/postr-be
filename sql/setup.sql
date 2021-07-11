@@ -50,7 +50,8 @@ CREATE TABLE comments (
     read_by_parent BOOLEAN NOT NULL,
     parent_comment_id BIGINT REFERENCES comments(id) ON DELETE SET NULL,
     user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
-    post_id BIGINT REFERENCES posts(id) ON DELETE SET NULL
+    post_id BIGINT REFERENCES posts(id) ON DELETE SET NULL,
+    parent_user_id BIGINT REFERENCES users(id) ON DELETE SET NULL
 );
 
 -- CREATE TYPE VALID_VOTES AS INT ENUM (-1, 0, 1);
