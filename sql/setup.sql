@@ -49,6 +49,7 @@ CREATE TABLE comments (
     date_modified BIGINT,
     read_by_parent BOOLEAN NOT NULL,
     parent_comment_id BIGINT REFERENCES comments(id) ON DELETE SET NULL,
+    parent_post_id BIGINT REFERENCES posts(id) ON DELETE SET NULL,
     user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
     post_id BIGINT REFERENCES posts(id) ON DELETE SET NULL
 );
@@ -87,6 +88,7 @@ begin
 		'date_created', comments.date_created,
 		'date_modified', comments.date_modified,
 		'parent_comment_id', comments.parent_comment_id,
+        'parent_post_id', comments.parent_post_id,
 		'createdBy', users.display_name,
         'user_id', comments.user_id,
 		'post_id', comments.post_id,
@@ -104,7 +106,7 @@ $$ language plpgsql;
 
 INSERT INTO users (email, display_name) VALUES ('jpendy256@gmail.com', 'Pendy');
 
-INSERT INTO users (email) VALUES ('tom@.com|postr');
+INSERT INTO users (email) VALUES ('tom@tom.com|postr');
 
 
 INSERT INTO boards (name, date_created, user_id) VALUES ('dev board 1', 1620751512118, 1);
