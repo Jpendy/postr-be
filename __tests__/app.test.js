@@ -7,4 +7,10 @@ describe('postr-be routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
+
+  it('test', () => {
+    expect(true).toEqual(true)
+  })
+
+
 });
