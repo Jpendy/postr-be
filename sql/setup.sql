@@ -106,12 +106,24 @@ $$ language plpgsql;
 
 INSERT INTO users (email, display_name) VALUES ('jpendy256@gmail.com', 'Pendy');
 
-INSERT INTO users (email) VALUES ('tom@tom.com|postr');
+INSERT INTO boards (name, date_created, user_id) VALUES ('Blazers', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Funny', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('NBA', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Baseball', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Books', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Fantasy', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Aww', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Science', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Gifs', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Space', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Music', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Art', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Gaming', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Movies', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Anime', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Cats', 1651278314903, 1);
+INSERT INTO boards (name, date_created, user_id) VALUES ('Interesting', 1651278314903, 1);
 
-
-INSERT INTO boards (name, date_created, user_id) VALUES ('dev board 1', 1620751512118, 1);
-INSERT INTO boards (name, banner_image_url, date_created, user_id) VALUES ('Blazers', 'https://cutewallpaper.org/21/portland-trail-blazers-background/Portland-Trail-Blazers-Banner-Fast-Online-Image-Editor-.jpg', 1620751512118, 1);
-
-INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Dame Time', 'https://i.ebayimg.com/images/g/CKsAAOSwjs5fj8XU/s-l300.jpg', 0, 1620751512118, 2, 1);
+INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Dame Time', 'https://i.ebayimg.com/images/g/CKsAAOSwjs5fj8XU/s-l300.jpg', 0, 1620751512118, 1, 1);
 
 -- INSERT INTO posts (title, image_url, vote_score, date_created, board_id, user_id) VALUES ('Kitten Post', 'http://placekitten.com/200/200', 0, '1999-01-01', 1, 2);
