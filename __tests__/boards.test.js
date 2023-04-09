@@ -22,7 +22,7 @@ describe('postr-be routes', () => {
     let user;
     let board;
     beforeEach(async () => {
-        user = await User.insert({
+        user = await User.insertPostrUser({
             googleId: '105191630947115329019',
             username: 'Jake',
             userImageUrl: 'http://placekitten.com/200/300'

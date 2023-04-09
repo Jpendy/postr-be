@@ -6,7 +6,7 @@ const User = require('../lib/models/User');
 
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
     req.user = {
-        id: '1',
+        id: '2',
         username: 'Jake',
         userImageUrl: 'http://placekitten.com/200/300'
     }
@@ -20,10 +20,10 @@ describe('postr-be routes', () => {
 
     let user;
     beforeEach(async () => {
-        user = await User.insert({
-            googleId: '105191630947115329019',
-            username: 'Jake',
-            userImageUrl: 'http://placekitten.com/200/300'
+        user = await User.insertPostrUser({
+            email: 'Jake@jake.com',
+            passwordHash: 'hkjlhkjh',
+            displayName: 'Jake'
         })
     })
 
@@ -32,11 +32,12 @@ describe('postr-be routes', () => {
             .get(`/api/v1/users/${user.id}`)
             .then(res => {
                 expect(res.body).toEqual({
-                    id: '1',
-                    username: 'Jake',
+                    id: '2',
+                    email: 'jake@jake.com',
                     displayName: 'Jake',
                     aboutMe: null,
-                    userImageUrl: 'http://placekitten.com/200/300'
+                    passwordHash: 'hkjlhkjh',
+                    userImageUrl: null
                 })
             })
     })
@@ -51,11 +52,12 @@ describe('postr-be routes', () => {
             })
             .then(res => {
                 expect(res.body).toEqual({
-                    id: '1',
-                    username: 'Jake',
+                    id: '2',
+                    email: 'jake@jake.com',
                     displayName: 'Jack Pendersmash',
                     userImageUrl: 'my new image oh yeahhhh',
-                    aboutMe: 'this is allllll about me'
+                    aboutMe: 'this is allllll about me',
+                    passwordHash: "hkjlhkjh"
                 })
             })
     })
@@ -65,11 +67,12 @@ describe('postr-be routes', () => {
             .delete(`/api/v1/users/${user.id}`)
             .then(res => {
                 expect(res.body).toEqual({
-                    id: '1',
-                    username: 'Jake',
+                    id: '2',
+                    email: 'jake@jake.com',
                     displayName: 'Jake',
                     aboutMe: null,
-                    userImageUrl: 'http://placekitten.com/200/300'
+                    passwordHash: 'hkjlhkjh',
+                    userImageUrl: null
                 })
             })
     })
