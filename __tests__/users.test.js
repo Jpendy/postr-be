@@ -6,9 +6,9 @@ const User = require('../lib/models/User');
 
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
     req.user = {
-        id: '2',
-        username: 'Jake',
-        userImageUrl: 'http://placekitten.com/200/300'
+        id: '1',
+        email: 'jake@jake.com',
+        displayName: 'Jake',
     }
     next()
 })
@@ -32,7 +32,7 @@ describe('postr-be routes', () => {
             .get(`/api/v1/users/${user.id}`)
             .then(res => {
                 expect(res.body).toEqual({
-                    id: '2',
+                    id: '1',
                     email: 'jake@jake.com',
                     displayName: 'Jake',
                     aboutMe: null,
@@ -52,7 +52,7 @@ describe('postr-be routes', () => {
             })
             .then(res => {
                 expect(res.body).toEqual({
-                    id: '2',
+                    id: '1',
                     email: 'jake@jake.com',
                     displayName: 'Jack Pendersmash',
                     userImageUrl: 'my new image oh yeahhhh',
@@ -67,7 +67,7 @@ describe('postr-be routes', () => {
             .delete(`/api/v1/users/${user.id}`)
             .then(res => {
                 expect(res.body).toEqual({
-                    id: '2',
+                    id: '1',
                     email: 'jake@jake.com',
                     displayName: 'Jake',
                     aboutMe: null,
