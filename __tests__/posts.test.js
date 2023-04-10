@@ -26,13 +26,18 @@ describe('postr-be routes', () => {
     let post;
     beforeEach(async () => {
         user = await User.insertPostrUser({
-            // googleId: '105191630947115329019',
-            username: 'Jake',
-            userImageUrl: 'http://placekitten.com/200/300'
+            email: 'Jake@jake.com',
+            passwordHash: 'hkjlhkjh',
+            displayName: 'Jake'
         })
 
         board = await Board.insert({
             name: 'first board',
+            bgColor: '#FFFFFF',
+            fontColor: null,
+            id: "2",
+            linkColor: null,
+            postColor: '#EEE4E1',
             userId: user.id,
         })
 
@@ -64,13 +69,20 @@ describe('postr-be routes', () => {
             })
             .then(res => {
                 expect(res.body).toEqual({
-                    id: '2',
+                    board: "first board",
+                    boardId: "1",
+                    body: "this is my second posts body",
+                    cloudinaryImagePublicId: null,
+                    commentCount: "0",
+                    createdBy: "Jake",
                     dateCreated: expect.any(String),
                     dateModified: null,
-                    title: 'second post',
-                    imageUrl: 'placeholderImageUrl',
-                    body: 'this is my second posts body',
-                    voteScore: '0',
+                    id: "2",
+                    imageUrl: "placeholderImageUrl",
+                    imageUrl: null,
+                    title: "second post",
+                    userId: "1",
+                    voteScore: "0",
                     userId: user.id,
                     boardId: board.id
                 })
@@ -81,20 +93,23 @@ describe('postr-be routes', () => {
         return request(app)
             .get('/api/v1/posts')
             .then(res => {
-                expect(res.body).toEqual([{
-                    id: '1',
-                    board: 'first board',
-                    dateCreated: expect.any(String),
-                    dateModified: null,
-                    title: 'first post',
-                    imageUrl: 'placeholderImageUrl',
-                    body: 'this is my first posts body',
-                    voteScore: '0',
-                    commentCount: '1',
-                    userId: user.id,
-                    boardId: board.id,
-                    createdBy: 'Jake'
-                }])
+                expect(res.body).toEqual({
+                    count: "1", page: 1, postArray: [{
+                        board: "first board",
+                        boardId: "1",
+                        body: "this is my first posts body",
+                        cloudinaryImagePublicId: null,
+                        commentCount: "1",
+                        createdBy: "Jake",
+                        dateCreated: expect.any(String),
+                        dateModified: null,
+                        id: "1",
+                        imageUrl: null,
+                        title: "first post",
+                        userId: "1",
+                        voteScore: "0"
+                    }]
+                })
             })
     })
 
@@ -105,7 +120,8 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     id: '1',
                     title: 'first post',
-                    imageUrl: 'placeholderImageUrl',
+                    imageUrl: null,
+                    cloudinaryImagePublicId: null,
                     body: 'this is my first posts body',
                     voteScore: '0',
                     dateCreated: expect.any(String),
@@ -123,6 +139,7 @@ describe('postr-be routes', () => {
                             dateCreated: expect.any(String),
                             dateModified: null,
                             parentCommentId: null,
+                            parentPostId: null,
                             createdBy: 'Jake',
                             userId: 1,
                             postId: 1,
@@ -148,6 +165,7 @@ describe('postr-be routes', () => {
                     dateModified: expect.any(String),
                     title: 'updated post',
                     imageUrl: 'placeholderImageUrl',
+                    cloudinaryImagePublicId: null,
                     body: 'this is my updated posts body',
                     voteScore: '0',
                     userId: user.id,
@@ -160,7 +178,18 @@ describe('postr-be routes', () => {
         return request(app)
             .delete(`/api/v1/posts/${post.id}`)
             .then(res => {
-                expect(res.body).toEqual(post)
+                expect(res.body).toEqual({
+                    boardId: "1",
+                    body: "this is my first posts body",
+                    cloudinaryImagePublicId: null,
+                    dateCreated: expect.any(String),
+                    dateModified: null,
+                    id: "1",
+                    imageUrl: null,
+                    userId: "1",
+                    voteScore: "0",
+                    title: "first post",
+                })
             })
     })
 
@@ -180,7 +209,8 @@ describe('postr-be routes', () => {
                         voteScore: '1',
                         dateCreated: expect.any(String),
                         dateModified: null,
-                        imageUrl: "placeholderImageUrl",
+                        imageUrl: null,
+                        cloudinaryImagePublicId: null,
                         title: "first post",
                         userId: "1",
                     },
@@ -215,7 +245,8 @@ describe('postr-be routes', () => {
                         voteScore: '1',
                         dateCreated: expect.any(String),
                         dateModified: null,
-                        imageUrl: "placeholderImageUrl",
+                        imageUrl: null,
+                        cloudinaryImagePublicId: null,
                         title: "first post",
                         userId: "1",
                     },
