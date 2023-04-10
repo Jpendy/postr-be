@@ -8,8 +8,8 @@ const Board = require('../lib/models/Board');
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
     req.user = {
         id: '1',
-        username: 'Jake',
-        userImageUrl: 'http://placekitten.com/200/300'
+        email: 'jake@jake.com',
+        displayName: 'Jake',
     }
     next()
 })
@@ -22,14 +22,19 @@ describe('postr-be routes', () => {
     let user;
     let board;
     beforeEach(async () => {
-        user = await User.insert({
-            googleId: '105191630947115329019',
-            username: 'Jake',
-            userImageUrl: 'http://placekitten.com/200/300'
+        user = await User.insertPostrUser({
+            email: 'Jake@jake.com',
+            passwordHash: 'hkjlhkjh',
+            displayName: 'Jake'
         })
 
         board = await Board.insert({
             name: 'first board',
+            bgColor: '#FFFFFF',
+            fontColor: null,
+            id: "2",
+            linkColor: null,
+            postColor: '#EEE4E1',
             userId: user.id,
         })
     })
@@ -40,16 +45,23 @@ describe('postr-be routes', () => {
             .send({
                 name: 'second board',
                 userId: user.id,
+                bgColor: '#FFFFFF',
+                fontColor: null,
+                id: "2",
+                linkColor: null,
+                name: "second board",
+                postColor: '#EEE4E1',
             })
             .then(res => {
                 expect(res.body).toEqual({
-                    id: '2',
-                    name: 'second board',
-                    userId: user.id,
                     bannerImageUrl: null,
-                    primaryColor: null,
-                    secondaryColor: null,
-                    tertiaryColor: null,
+                    bgColor: '#FFFFFF',
+                    fontColor: null,
+                    id: "2",
+                    linkColor: null,
+                    name: "second board",
+                    postColor: '#EEE4E1',
+                    userId: "1",
                     dateCreated: expect.any(String),
                 })
             })
@@ -63,9 +75,10 @@ describe('postr-be routes', () => {
                     id: '1',
                     name: 'first board',
                     bannerImageUrl: null,
-                    primaryColor: null,
-                    secondaryColor: null,
-                    tertiaryColor: null,
+                    bgColor: '#FFFFFF',
+                    fontColor: null,
+                    linkColor: null,
+                    postColor: '#EEE4E1',
                     postCount: "0",
                     userId: board.id,
                     dateCreated: expect.any(String),
@@ -81,10 +94,12 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     id: '1',
                     name: 'first board',
+                    createdBy: 'Jake',
                     bannerImageUrl: null,
-                    primaryColor: null,
-                    secondaryColor: null,
-                    tertiaryColor: null,
+                    bgColor: '#FFFFFF',
+                    fontColor: null,
+                    linkColor: null,
+                    postColor: '#EEE4E1',
                     postCount: "0",
                     posts: [],
                     userId: board.id,
@@ -97,20 +112,26 @@ describe('postr-be routes', () => {
         return request(app)
             .put(`/api/v1/boards/${board.id}`)
             .send({
-                name: 'new name',
-                bannerImageUrl: 'new banner image url',
-                primaryColor: 'new primary color',
-                secondaryColor: 'new secondar ycolor',
-                tertiaryColor: 'new third color'
+                bannerImageUrl: null,
+                bgColor: '#FFFFFF',
+                fontColor: null,
+                id: "1",
+                linkColor: null,
+                name: "new board name",
+                postColor: '#EEE4E1',
+                userId: "1",
             })
             .then(res => {
                 expect(res.body).toEqual({
                     ...board,
-                    name: 'new name',
-                    bannerImageUrl: 'new banner image url',
-                    primaryColor: 'new primary color',
-                    secondaryColor: 'new secondar ycolor',
-                    tertiaryColor: 'new third color'
+                    bannerImageUrl: null,
+                    bgColor: '#FFFFFF',
+                    fontColor: null,
+                    id: "1",
+                    linkColor: null,
+                    name: "new board name",
+                    postColor: '#EEE4E1',
+                    userId: "1",
                 })
             })
     })

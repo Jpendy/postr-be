@@ -10,8 +10,8 @@ const Comment = require('../lib/models/Comment');
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
     req.user = {
         id: '1',
-        username: 'Jake',
-        userImageUrl: 'http://placekitten.com/200/300'
+        email: 'jake@jake.com',
+        displayName: 'Jake',
     }
     next()
 })
@@ -26,14 +26,19 @@ describe('postr-be routes', () => {
     let post;
     let comment;
     beforeEach(async () => {
-        user = await User.insert({
-            googleId: '105191630947115329019',
-            username: 'Jake',
-            userImageUrl: 'http://placekitten.com/200/300'
+        user = await User.insertPostrUser({
+            email: 'Jake@jake.com',
+            passwordHash: 'hkjlhkjh',
+            displayName: 'Jake'
         })
 
         board = await Board.insert({
             name: 'first board',
+            bgColor: '#FFFFFF',
+            fontColor: null,
+            id: "2",
+            linkColor: null,
+            postColor: '#EEE4E1',
             userId: user.id,
         })
 
@@ -53,64 +58,64 @@ describe('postr-be routes', () => {
         })
     })
 
-    afterEach(async () => {
-        await setup(pool)
+    // afterEach(async () => {
+    //     await setup(pool)
 
-        user = await User.insert({
-            googleId: '105191630947115329019',
-            username: 'Jake',
-            userImageUrl: 'http://placekitten.com/200/300'
-        })
+    //     user = await User.insertPostrUser({
+    //         googleId: '105191630947115329019',
+    //         username: 'Jake',
+    //         userImageUrl: 'http://placekitten.com/200/300'
+    //     })
 
-        board = await Board.insert({
-            name: 'first board',
-            userId: user.id,
-        })
+    //     board = await Board.insert({
+    //         name: 'first board',
+    //         userId: user.id,
+    //     })
 
-        post = await Post.insert({
-            title: 'first post',
-            imageUrl: 'placeholderImageUrl',
-            body: 'this is my first posts body',
-            userId: user.id,
-            boardId: board.id
-        })
+    //     post = await Post.insert({
+    //         title: 'first post',
+    //         imageUrl: 'placeholderImageUrl',
+    //         body: 'this is my first posts body',
+    //         userId: user.id,
+    //         boardId: board.id
+    //     })
 
-        comment = await Comment.insert({
-            body: 'first comment body',
-            parentCommentId: null,
-            userId: user.id,
-            postId: post.id
-        })
+    //     comment = await Comment.insert({
+    //         body: 'first comment body',
+    //         parentCommentId: null,
+    //         userId: user.id,
+    //         postId: post.id
+    //     })
 
-        await Comment.insert({
-            body: 'independant comment body',
-            parentCommentId: null,
-            userId: user.id,
-            postId: post.id
-        })
+    //     await Comment.insert({
+    //         body: 'independant comment body',
+    //         parentCommentId: null,
+    //         userId: user.id,
+    //         postId: post.id
+    //     })
 
-        const second = await Comment.insert({
-            body: 'second comment body',
-            parentCommentId: comment.id,
-            userId: user.id,
-            postId: null
-        })
+    //     const second = await Comment.insert({
+    //         body: 'second comment body',
+    //         parentCommentId: comment.id,
+    //         userId: user.id,
+    //         postId: null
+    //     })
 
-        await Comment.insert({
-            body: 'most inner comment body',
-            parentCommentId: second.id,
-            userId: user.id,
-            postId: null
-        })
+    //     await Comment.insert({
+    //         body: 'most inner comment body',
+    //         parentCommentId: second.id,
+    //         userId: user.id,
+    //         postId: null
+    //     })
 
-        await Comment.insert({
-            body: 'third comment body',
-            parentCommentId: comment.id,
-            userId: user.id,
-            postId: null
-        })
+    //     await Comment.insert({
+    //         body: 'third comment body',
+    //         parentCommentId: comment.id,
+    //         userId: user.id,
+    //         postId: null
+    //     })
 
-    })
+    // })
 
     it('it posts a new comment with POST', () => {
         return request(app)
@@ -125,8 +130,11 @@ describe('postr-be routes', () => {
                 expect(res.body).toEqual({
                     id: '2',
                     body: 'second comment body',
+                    createdBy: 'Jake',
                     voteScore: '0',
                     parentCommentId: null,
+                    parentPostId: null,
+                    readByParent: false,
                     dateCreated: expect.any(String),
                     dateModified: null,
                     userId: user.id,
@@ -145,6 +153,7 @@ describe('postr-be routes', () => {
                     dateModified: null,
                     id: 1,
                     parentCommentId: null,
+                    parentPostId: null,
                     postId: 1,
                     userId: 1,
                     createdBy: 'Jake',
@@ -163,9 +172,16 @@ describe('postr-be routes', () => {
             })
             .then(res => {
                 expect(res.body).toEqual({
-                    ...comment,
                     body: 'my updated body',
-                    dateModified: expect.any(String)
+                    dateCreated: expect.any(String),
+                    dateModified: expect.any(String),
+                    id: "1",
+                    parentCommentId: null,
+                    parentPostId: null,
+                    postId: "1",
+                    readByParent: false,
+                    userId: "1",
+                    voteScore: "0",
                 })
             })
     })
@@ -174,7 +190,18 @@ describe('postr-be routes', () => {
         return request(app)
             .delete(`/api/v1/comments/${comment.id}`)
             .then(res => {
-                expect(res.body).toEqual(comment)
+                expect(res.body).toEqual({
+                    id: '1',
+                    body: "first comment body",
+                    dateCreated: expect.any(String),
+                    dateModified: null,
+                    parentCommentId: null,
+                    parentPostId: null,
+                    postId: "1",
+                    readByParent: false,
+                    userId: "1",
+                    voteScore: "0",
+                })
             })
     })
 
