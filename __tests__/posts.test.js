@@ -10,8 +10,8 @@ const Comment = require('../lib/models/Comment');
 jest.mock('../lib/middleware/ensureAuth.js', () => (req, res, next) => {
     req.user = {
         id: '1',
-        username: 'Jake',
-        userImageUrl: 'http://placekitten.com/200/300'
+        email: 'jake@jake.com',
+        displayName: 'Jake',
     }
     next()
 })
